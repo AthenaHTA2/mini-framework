@@ -309,17 +309,100 @@ function createElement(type, props, ...children) {
   function Counter() {
     const [state, setState] = Web_pilot.useState(1)
     return (
-      // <h1 onClick={() => setState(c => c + 1)}>
-      //   Count: {state}
-      // </h1>
-      Web_pilot.createElement(
-        "h1",
-        {onClick: () => setState(c => c + 1)} ,
-        "Count: ",
-        state
-      )
+      <h1 onClick={() => setState(c => c + 1)}>
+        Count: {state}
+       </h1>
+      // Web_pilot.createElement(
+      //   "h1",
+      //   {onClick: () => setState(c => c + 1)} ,
+      //   "Count: ",
+      //   state
+      // )
     )
   }
   const element = Web_pilot.createElement(Counter)
   const container = document.getElementById("root")
   Web_pilot.render(element, container)
+
+
+
+  // start of parcel-js testing
+  //This function consol logs correct colour,
+  // but rendering does not change
+
+  /** @jsx Web_pilot.createElement */
+  /*function ChooseColour() {
+
+   let availableColors = [
+      'darkslateblue', 
+      'midnightblue', 
+      'teal', 
+      'tomato', 
+      'seagreen', 
+      'royalblue', 
+      'saddlebrown', 
+      'indigo', 
+      'olivedrab', 
+      'rosybrown'
+    ];
+    
+    const [indx, setIndx] = Web_pilot.useState(9)
+    const [myColour, setMyColour]  = Web_pilot.useState(availableColors[9])
+
+    return (
+      <h1 onClick={() => {
+        let theIdx = Math.floor(parseInt(Math.random() * 10), 10)
+        setIndx(theIdx)
+        console.log("the color index is:", theIdx)
+        setMyColour(availableColors[theIdx])
+        console.log("the chosen color is:", availableColors[theIdx])
+        console.log("the chosen color state is:", myColour)
+
+        // Use the callback to log the updated values
+        setIndx((prevIndx) => {
+          console.log("the color index is:", prevIndx);
+          return prevIndx;
+        });
+
+        setMyColour((prevColor) => {
+          console.log("the chosen color is:", prevColor);
+          return prevColor;
+        });
+
+      }
+      }>
+        Colour: {myColour}
+       </h1>
+
+    )
+  }
+
+  const background = Web_pilot.createElement(ChooseColour);
+  Web_pilot.render(background, container)*/
+
+//end of parcel-js testing
+
+
+
+  /** @jsx Web_pilot.createElement */
+  /*function ChooseColour() {
+    const col = document.getElementById('root');
+    // const body = document.querySelector('body');
+    let availableColors = ['darkslateblue', 'midnightblue', 'teal', 'tomato', 'seagreen', 'royalblue', 'saddlebrown', 'indigo', 'olivedrab', 'rosybrown'];
+    const [myColour, setMyColour]  = Web_pilot.useState(0);
+    return (
+      Web_pilot.createElement(
+     "h1",
+      {onClick: () => {
+      let randomizeColor = Math.floor(Math.random() * 10);
+      console.log("the color index is:", randomizeColor)
+      setMyColour(Math.floor(Math.random() * 10))
+      
+      }
+    },
+    "Colour:" ,
+    availableColors[myColour]
+
+    )
+    )
+  }*/

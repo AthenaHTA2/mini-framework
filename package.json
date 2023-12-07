@@ -1,0 +1,22 @@
+{
+  "name": "mini-framework",
+  "version": "1.0.0",
+  "description": "(01F JS project #5)",
+  "source": "static/index.html",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build --dist-dir public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "(https://learn.01founders.co/git/AthenaHTA2/mini-framework.git)"
+  },
+  "keywords": [
+    "(react)"
+  ],
+  "author": " (Hannah Alemu, Helena Sedmak)",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.10.3"
+  }
+}
