@@ -1,0 +1,12 @@
+{
+    "name": "web_pilot",
+    "version": "1.0.0",
+    "description": "A didactic alternative to React",
+    "license": "MIT",
+    "repository": "AthenaHTA2/mini-framework",
+    "author": "AthenaHTA2",
+    "main": "web_pilot.js",
+    "keywords": [
+      "react"
+    ]
+  }
