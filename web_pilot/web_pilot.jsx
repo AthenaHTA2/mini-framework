@@ -1,3 +1,4 @@
+
 function createElement(type, props, ...children) {
     return {
       type,
@@ -11,6 +12,7 @@ function createElement(type, props, ...children) {
       },
     }
   }
+
   
   function createTextElement(text) {
     return {
@@ -21,6 +23,8 @@ function createElement(type, props, ...children) {
       },
     }
   }
+
+
   
   function createDom(fiber) {
     const dom =
@@ -304,6 +308,8 @@ function createElement(type, props, ...children) {
     render,
     useState,
   }
+
+//Start of function exercises
   
   /** @jsx Web_pilot.createElement */
   function Counter() {
@@ -312,12 +318,6 @@ function createElement(type, props, ...children) {
       <h1 onClick={() => setState(c => c + 1)}>
         Count: {state}
        </h1>
-      // Web_pilot.createElement(
-      //   "h1",
-      //   {onClick: () => setState(c => c + 1)} ,
-      //   "Count: ",
-      //   state
-      // )
     )
   }
   const element = Web_pilot.createElement(Counter)
@@ -326,9 +326,21 @@ function createElement(type, props, ...children) {
 
 
 
-  // start of parcel-js testing
-  //This function consol logs correct colour,
-  // but rendering does not change
+/** @jsx Web_pilot.createElement */
+/*function Img() {
+  const [img, setImg] = Web_pilot.useState("")
+  return(
+      // <h1 onClick={() => setImg(s => s+srce)}>
+      //   Image: 
+      //  </h1>
+       <img src="https://64.media.tumblr.com/2d41d0da5225dd0fb7e2d23a850636fa/tumblr_o5q9dcVWue1tbx2dfo1_1280.jpg" tag="Jackie partying" onClick={() => setImg(s => s+"https://64.media.tumblr.com/2d41d0da5225dd0fb7e2d23a850636fa/tumblr_o5q9dcVWue1tbx2dfo1_1280.jpg")}>
+       </img>
+)
+}
+ const portrait = Web_pilot.createElement(Img)
+ Web_pilot.render(portrait, container)*/
+
+
 
   /** @jsx Web_pilot.createElement */
   /*function ChooseColour() {
@@ -346,32 +358,11 @@ function createElement(type, props, ...children) {
       'rosybrown'
     ];
     
-    const [indx, setIndx] = Web_pilot.useState(9)
-    const [myColour, setMyColour]  = Web_pilot.useState(availableColors[9])
-
+    let [indx, setIndx] = Web_pilot.useState(0)
+    
     return (
-      <h1 onClick={() => {
-        let theIdx = Math.floor(parseInt(Math.random() * 10), 10)
-        setIndx(theIdx)
-        console.log("the color index is:", theIdx)
-        setMyColour(availableColors[theIdx])
-        console.log("the chosen color is:", availableColors[theIdx])
-        console.log("the chosen color state is:", myColour)
-
-        // Use the callback to log the updated values
-        setIndx((prevIndx) => {
-          console.log("the color index is:", prevIndx);
-          return prevIndx;
-        });
-
-        setMyColour((prevColor) => {
-          console.log("the chosen color is:", prevColor);
-          return prevColor;
-        });
-
-      }
-      }>
-        Colour: {myColour}
+      <h1 onClick={() => setIndx(i => (i-i) + Math.floor(parseInt(Math.random() * 10), 10))}>
+        Colour: {availableColors[indx]}
        </h1>
 
     )
@@ -380,29 +371,56 @@ function createElement(type, props, ...children) {
   const background = Web_pilot.createElement(ChooseColour);
   Web_pilot.render(background, container)*/
 
-//end of parcel-js testing
 
 
 
   /** @jsx Web_pilot.createElement */
-  /*function ChooseColour() {
-    const col = document.getElementById('root');
-    // const body = document.querySelector('body');
-    let availableColors = ['darkslateblue', 'midnightblue', 'teal', 'tomato', 'seagreen', 'royalblue', 'saddlebrown', 'indigo', 'olivedrab', 'rosybrown'];
-    const [myColour, setMyColour]  = Web_pilot.useState(0);
-    return (
-      Web_pilot.createElement(
-     "h1",
-      {onClick: () => {
-      let randomizeColor = Math.floor(Math.random() * 10);
-      console.log("the color index is:", randomizeColor)
-      setMyColour(Math.floor(Math.random() * 10))
-      
-      }
-    },
-    "Colour:" ,
-    availableColors[myColour]
+  
+  //To read window URL:
+  /*myKeyValues = window.location.search
+  const urlParams = new URLSearchParams()
+  //URLSearchParams.set()
+  let param1 = URLSearchParams.get('name');
+  console.log("name:", param1)
 
-    )
-    )
-  }*/
+  //from: https://www.youtube.com/watch?v=RIBiQ5GNYWo
+  //To set URL value: 
+  let myURL = new URL('https://www.youtube.com');
+  console.log("the hostname is:", myURL.hostname)
+  //to change my url hostname value:
+  myURL.hostname =  'google.com';
+  //to see the entire new url:
+  let my newURL = myURL.href
+  console.log(newURL.toString());
+
+  //newURL.search = "?name=dom&age=56";
+  newURL.searchParams.set("name","dom");
+   newURL.searchParams.set("age","72");
+
+
+
+  */
+
+//router function from: https://www.youtube.com/watch?v=bAn5YmPmtXI
+/*function Route(){
+window.onload() = () => {
+  entry.appendChild(
+    router({
+      "/": Tabs({
+        "All": All,
+        "Active": Active,
+        "Completed": Completed
+      }),
+      "/secret": div(
+        p(text("this is a secret page. What are you doing here?")),
+        Image("https://64.media.tumblr.com/2d41d0da5225dd0fb7e2d23a850636fa/tumblr_o5q9dcVWue1tbx2dfo1_1280.jpg")
+      )}
+    ))
+    }
+  }
+
+  const uPath = Web_pilot.createElement(Route)
+  Web_pilot.render(uPath, container)*/
+
+
+// End of function exercises
