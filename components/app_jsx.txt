@@ -1,0 +1,11 @@
+
+
+function App(){
+
+    return(
+
+        <NewTodo />
+    )
+}
+
+export default App;

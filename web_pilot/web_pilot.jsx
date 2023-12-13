@@ -1,4 +1,5 @@
 
+
 function createElement(type, props, ...children) {
     return {
       type,
@@ -309,10 +310,12 @@ function createElement(type, props, ...children) {
     useState,
   }
 
-//Start of function exercises
+//======> Start of function exercises <=======
+
+const container = document.getElementById("root")
   
   /** @jsx Web_pilot.createElement */
-  function Counter() {
+  /*function Counter() {
     const [state, setState] = Web_pilot.useState(1)
     return (
       <h1 onClick={() => setState(c => c + 1)}>
@@ -321,8 +324,8 @@ function createElement(type, props, ...children) {
     )
   }
   const element = Web_pilot.createElement(Counter)
-  const container = document.getElementById("root")
-  Web_pilot.render(element, container)
+  //const container = document.getElementById("root")
+  Web_pilot.render(element, container)*/
 
 
 
@@ -374,8 +377,7 @@ function createElement(type, props, ...children) {
 
 
 
-  /** @jsx Web_pilot.createElement */
-  
+  ///** @jsx Web_pilot.createElement */
   //To read window URL:
   /*myKeyValues = window.location.search
   const urlParams = new URLSearchParams()
@@ -401,26 +403,169 @@ function createElement(type, props, ...children) {
 
   */
 
-//router function from: https://www.youtube.com/watch?v=bAn5YmPmtXI
-/*function Route(){
-window.onload() = () => {
-  entry.appendChild(
-    router({
-      "/": Tabs({
-        "All": All,
-        "Active": Active,
-        "Completed": Completed
-      }),
-      "/secret": div(
-        p(text("this is a secret page. What are you doing here?")),
-        Image("https://64.media.tumblr.com/2d41d0da5225dd0fb7e2d23a850636fa/tumblr_o5q9dcVWue1tbx2dfo1_1280.jpg")
-      )}
-    ))
+   //===> Start of 'Make-to v0.0' that is not working <====
+
+  /** @jsx Web_pilot.createElement */
+ /*function NewTodo() {
+  const [dude, setDude] = Web_pilot.useState("")
+   appendHere = document.querySelector(".todo-list");
+   appendHere.addEventListener("onkeydown",(Event) => {
+    if(Event.key === 'Enter'){
+
+      setDude(()=> Event.target.value)
+
+      return (
+        <li key={dude} className data-reactid=".2.0.1">
+          <div  className="view" data-reactid=".2.0.1">
+          <input className="toggle" type="checkbox" data-reactid=".2.0.2" />
+          <label data-reactid=".2.0.3">{dude}</label>
+          </div>
+        </li>
+      );
     }
+  })
+   }
+
+    //})
+ // }
+
+  let appendHere = document.querySelector(".todo-list")
+  const showItem = Web_pilot.createElement(NewTodo)
+  Web_pilot.render(showItem, appendHere)*/
+
+   //===> End of 'Make-to v0.0' that is not working <====
+
+
+   //===> Start of 'Make-to v0.1' do that returns an empty input <====
+
+     /** @jsx Web_pilot.createElement */
+  function typeIn(){
+    const theInput = document.querySelector(".new-todo");
+
+   function ImListening(){
+    theInput.addEventListener('onkeydown', NewTodo())
+   }
+
+    window.addEventListener('onload', ImListening())
   }
 
-  const uPath = Web_pilot.createElement(Route)
-  Web_pilot.render(uPath, container)*/
+  let theInput = document.querySelector(".new-todo");
+  const attachListener = Web_pilot.createElement(typeIn)
+  Web_pilot.render(attachListener, theInput)
 
 
-// End of function exercises
+
+  /** @jsx Web_pilot.createElement */
+function NewTodo() {
+  const [dude, setDude] = Web_pilot.useState("");
+  const appendHere = document.querySelector(".todo-list");
+  const theInput = document.querySelector(".new-todo");
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      setDude(() => "" + event.target.value);
+
+
+      const newItem = (
+        <li key={dude} >
+        <div className="view">
+        <input type="checkbox" className="toggle"/>
+        <label value={dude}></label>
+        <button className="destroy"></button>
+        </div>
+        <input className="edit" value={dude}></input>
+      </li>
+      )
+
+        Web_pilot.render(newItem, appendHere)
+
+    }
+  };
+
+  theInput.addEventListener('onkeydown', handleKeyDown)
+
+  return (
+  <input
+    className="new-todo"
+    onKeyDown={handleKeyDown}
+     pvalue={dude} >
+    <li key={dude} >
+      <div className="view">
+      <input type="checkbox" className="toggle"/>
+      <label value={dude}></label>
+      <button className="destroy"></button>
+      </div>
+    <input className="edit" value={dude}></input>
+    </li>
+  </input>
+  )
+
+}
+
+let appendHere = document.querySelector(".todo-list");
+const showItem = Web_pilot.createElement(NewTodo);
+Web_pilot.render(showItem, appendHere);
+
+//===> End of 'Make to-do' that returns an empty input <====
+//Web_pilot.createElement(li,["key"]={dude} ["className"]="todo-list",[div,["className"]="view",nil, input,["className"]="toggle" ["type"]="checkbox", nil, label,["value"]={dude}])
+
+/** @jsx Web_pilot.createElement */
+/*function NewTodo(Event) {
+  const [dude, setDude] = Web_pilot.useState("");
+  const appendHere = document.querySelector(".todo-list");
+  const theInput = document.querySelector(".new-todo");
+  
+  function NewItem() {
+   
+    if (Event.key === 'Enter') {
+      setDude(() => Event.target.value);
+
+     // appendHere.onKeyDown(() => handleKeyDown())
+      //className="new-todo"
+      //placeholder="The second input"
+
+      const newItem = (
+        <li key={dude} >
+        <div className="view">
+        <input type="checkbox" className="toggle"/>
+        <label value={dude}></label>
+        <button className="destroy"></button>
+        </div>
+        <input className="edit" value={dude}></input>
+      </li>
+      )
+
+         Web_pilot.render(newItem, appendHere)
+  }
+  }
+
+  theInput.addEventListener('onkeydown', NewItem)
+  console.log("the key value is:", Event.target.value)
+
+  return (
+    <li key={dude} >
+    <div className="view">
+    <input type="checkbox" className="toggle"/>
+    <label value={dude}></label>
+    <button className="destroy"></button>
+    </div>
+    <input className="edit" value={dude}></input>
+  </li>
+   )
+
+   //return(
+// Web_pilot.createElement(NewItem)
+   //)
+
+}
+
+
+
+
+
+
+
+let appendHere = document.querySelector(".todo-list");
+const showItem = Web_pilot.createElement(NewTodo);
+Web_pilot.render(showItem, appendHere);*/
+
