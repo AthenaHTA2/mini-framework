@@ -1,16 +1,18 @@
 
 function createElement(type, props, ...children) {
-    return {
-      type,
-      props: {
-        ...props,
-        children: children.map(child =>
-          typeof child === "object"
-            ? child
-            : createTextElement(child)
-        ),
-      },
-    }
+  let element = {
+    type,
+    props: {
+      ...props,
+      children: children.map(child =>
+        typeof child === "object"
+          ? child
+          : createTextElement(child)
+      ),
+    },
+  }
+  console.log("Element Created:", element)
+    return element
   }
 
   
@@ -328,7 +330,7 @@ function createElement(type, props, ...children) {
   }
   const element = Web_pilot.createElement(Counter)
   const container = document.getElementById("root")
-  Web_pilot.render(element, container)
+  // Web_pilot.render(element, container)
 
 
 
@@ -349,7 +351,7 @@ function createElement(type, props, ...children) {
 
 
   /** @jsx Web_pilot.createElement */
-  /*function ChooseColour() {
+  function ChooseColour() {
 
    let availableColors = [
       'darkslateblue', 
@@ -375,7 +377,7 @@ function createElement(type, props, ...children) {
   }
 
   const background = Web_pilot.createElement(ChooseColour);
-  Web_pilot.render(background, container)*/
+  Web_pilot.render(background, container)
 
 
 
