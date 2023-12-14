@@ -1,6 +1,7 @@
-// import {CreateInput} from "./createInput.jsx"
-// import {Web_pilot} from "../web_pilot/web_pilot.jsx"
+import {Web_pilot} from "../web_pilot/web_pilot.jsx"
+import {CreateInput} from "./createInput.jsx"
 
+  /** @jsx Web_pilot.createElement */
 function App(){
 
     return(

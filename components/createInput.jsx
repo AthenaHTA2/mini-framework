@@ -1,9 +1,7 @@
-  // import {Web_pilot} from "../web_pilot/web_pilot.jsx"
+import {Web_pilot} from "../web_pilot/web_pilot.jsx"
   
-  //=====> function to create a TODO item <========
-
   /** @jsx Web_pilot.createElement */
-  function CreateInput() {
+  export function CreateInput() {
   
       const NewTodo= (event) => {
     
@@ -12,6 +10,12 @@
           const appendHere = document.querySelector(".todo-list");
           let task = event.target.value
           const [state, setState] = Web_pilot.useState(task);  
+
+          const theSection = document.querySelector(".main")
+          const theFooter = document.querySelector(".footer")
+
+          theSection.setAttribute("style", "display: block;");
+          theFooter.setAttribute("style", "display: block;");
     
           function createNewTask() {
           
