@@ -311,21 +311,21 @@ function createElement(type, props, ...children) {
     useState,
   }
   
-  /** @jsx Web_pilot.createElement */
-  function Counter() {
-    const [state, setState] = Web_pilot.useState(1)
-    return (
-      // <h1 onClick={() => setState(c => c + 1)}>
-      //   Count: {state}
-      // </h1>
-      Web_pilot.createElement(
-        "h1",
-        {onClick: () => setState(c => c + 1)} ,
-        "Count: ",
-        state
-      )
-    )
-  }
-  const element = Web_pilot.createElement(Counter)
-  const container = document.getElementById("root")
-  Web_pilot.render(element, container)
+  // /** @jsx Web_pilot.createElement */
+  // function Counter() {
+  //   const [state, setState] = Web_pilot.useState(1)
+  //   return (
+  //     // <h1 onClick={() => setState(c => c + 1)}>
+  //     //   Count: {state}
+  //     // </h1>
+  //     Web_pilot.createElement(
+  //       "h1",
+  //       {onClick: () => setState(c => c + 1)} ,
+  //       "Count: ",
+  //       state
+  //     )
+  //   )
+  // }
+  // const element = Web_pilot.createElement(Counter)
+  // const container = document.getElementById("header")
+  // Web_pilot.render(element, container)

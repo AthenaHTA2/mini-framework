@@ -1,9 +1,9 @@
 
-const root = document.querySelector("#root")
+const root = document.querySelector("header")
 const newTaskBar = Web_pilot.createElement(
         "input", 
         {className:"new-todo", 
-        placeholder:"what sjkhjdka needsto be done?", 
+        placeholder:"What needs to be done?", 
         autofocus: "true", 
         onkeydown: (e) => {e.key == 'Enter'? AddTask(e.target.value): null} 
         },
