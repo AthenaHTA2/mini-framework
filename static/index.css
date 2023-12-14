@@ -353,6 +353,14 @@ html .clear-completed:active {
 	text-decoration: underline;
 }
 
+ /* Start of testing parcel-js */
+#TestButton {
+	font-size: inherit;
+	font-size: 1rem;
+	padding: .5rem;
+  }
+  /* End of testing parcel-js */
+
 /*
 	Hack to remove background from Mobile Safari.
 	Can't use it globally since it destroys checkboxes in Firefox
