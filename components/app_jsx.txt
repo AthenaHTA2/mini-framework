@@ -1,11 +1,16 @@
-
+// import {CreateInput} from "./createInput.jsx"
+// import {Web_pilot} from "../web_pilot/web_pilot.jsx"
 
 function App(){
 
     return(
 
-        <NewTodo />
+        <CreateInput/>
     )
 }
 
 export default App;
+
+let appendHere = document.getElementsByClassName("header")[0];
+const showItem = Web_pilot.createElement(App);
+Web_pilot.render(showItem, appendHere);

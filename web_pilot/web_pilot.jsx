@@ -95,6 +95,7 @@ function createElement(type, props, ...children) {
   }
   
   function commitRoot() {
+    pendingEffects.forEach(it => it()) // call pending effects after render
     deletions.forEach(commitWork)
     commitWork(wipRoot.child)
     currentRoot = wipRoot
@@ -182,6 +183,23 @@ function createElement(type, props, ...children) {
       fiber.type instanceof Function
     if (isFunctionComponent) {
       updateFunctionComponent(fiber)
+      // Object .keys(wipFiber._hooks)
+      //               .filter(hookIndex => wipFiber._hooks[hookIndex].tag === "EFFECT")
+      //               .forEach(hookIndex => {
+      //                   const oldHook =
+      //                       wipFiber.alternate &&
+      //                       wipFiber.alternate._hooks &&
+      //                       wipFiber.alternate._hooks[hookIndex]
+
+      //                   const hook = wipFiber._hooks[hookIndex]
+      //                   const depsChanged = (prev, next) => (_, index) => prev[index] !== next[index];
+      //                   if (hook.deps.length === 0 && !oldHook
+      //                       || oldHook && (oldHook.deps.length !== hook.deps.length
+      //                           || oldHook && hook.deps.filter(depsChanged(oldHook.deps, hook.deps)).length !== 0)) {
+      //                       pendingEffects.push(hook.fn)
+      //                   }
+      //               })
+      
     } else {
       updateHostComponent(fiber)
     }
@@ -238,6 +256,22 @@ function createElement(type, props, ...children) {
     hookIndex++
     return [hook.state, setState]
   }
+  // ------------------------------------------------------------------------- //
+  let pendingEffects = []
+  function useEffect(fn, deps) {
+    const hook = {
+        tag: "EFFECT",
+        fn,
+        deps,
+    }
+
+    wipFiber._hooks.push(hook)
+    hookIndex++
+}
+
+
+  // ------------------------------------------------------------------------- //
+
   
   function updateHostComponent(fiber) {
     if (!fiber.dom) {
@@ -308,6 +342,7 @@ function createElement(type, props, ...children) {
     createElement,
     render,
     useState,
+    useEffect,
   }
 
 //======> Start of function exercises <=======
@@ -316,7 +351,7 @@ const container = document.getElementById("root")
   
   /** @jsx Web_pilot.createElement */
   /*function Counter() {
-    const [state, setState] = Web_pilot.useState(1)
+    const [state, setState] = Web_pilot.useStatstate(1)
     return (
       <h1 onClick={() => setState(c => c + 1)}>
         Count: {state}
@@ -346,7 +381,7 @@ const container = document.getElementById("root")
 
 
   /** @jsx Web_pilot.createElement */
-  /*function ChooseColour() {
+  function ChooseColour() {
 
    let availableColors = [
       'darkslateblue', 
@@ -372,7 +407,7 @@ const container = document.getElementById("root")
   }
 
   const background = Web_pilot.createElement(ChooseColour);
-  Web_pilot.render(background, container)*/
+  Web_pilot.render(background, container)
 
 
 
@@ -439,7 +474,8 @@ const container = document.getElementById("root")
    //===> Start of 'Make-to v0.1' do that returns an empty input <====
 
      /** @jsx Web_pilot.createElement */
-  function typeIn(){
+     
+  /*function typeIn(){
     const theInput = document.querySelector(".new-todo");
 
    function ImListening(){
@@ -456,55 +492,54 @@ const container = document.getElementById("root")
 
 
   /** @jsx Web_pilot.createElement */
-function NewTodo() {
-  const [dude, setDude] = Web_pilot.useState("");
-  const appendHere = document.querySelector(".todo-list");
-  const theInput = document.querySelector(".new-todo");
-
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      setDude(() => "" + event.target.value);
-
-
-      const newItem = (
-        <li key={dude} >
-        <div className="view">
-        <input type="checkbox" className="toggle"/>
-        <label value={dude}></label>
-        <button className="destroy"></button>
-        </div>
-        <input className="edit" value={dude}></input>
-      </li>
+    /*function CreateInput() {
+  
+      const NewTodo= (event) => {
+    
+        if (event.key === "Enter") {
+    
+          const appendHere = document.querySelector(".todo-list");
+          let task = event.target.value
+          const [state, setState] = Web_pilot.useState(task);  
+    
+          function createNewTask() {
+          
+            return ( 
+              <li key={state} >
+                <div className="view">
+                  <input type="checkbox" className="toggle"/>
+                  <label value={state}>{state}</label>
+                  <button className="destroy"></button>
+                </div>
+                <input className="edit" value={state}></input>
+              </li>
+            )
+          }
+         
+          let newTask = Web_pilot.createElement(createNewTask)
+    
+          Web_pilot.render(newTask, appendHere)
+    
+        }
+      };
+    
+    
+      return (
+      <input
+        className="new-todo"
+        onKeyDown= {(e) => {NewTodo(e)}}
+        placeholder="What needs to be done?" >
+      </input>
       )
-
-        Web_pilot.render(newItem, appendHere)
-
+    
     }
-  };
+    
+    let appendHere = document.getElementsByClassName("header")[0];
+    const showItem = Web_pilot.createElement(CreateInput);
+    Web_pilot.render(showItem, appendHere);*/
 
-  theInput.addEventListener('onkeydown', handleKeyDown)
 
-  return (
-  <input
-    className="new-todo"
-    onKeyDown={handleKeyDown}
-     pvalue={dude} >
-    <li key={dude} >
-      <div className="view">
-      <input type="checkbox" className="toggle"/>
-      <label value={dude}></label>
-      <button className="destroy"></button>
-      </div>
-    <input className="edit" value={dude}></input>
-    </li>
-  </input>
-  )
 
-}
-
-let appendHere = document.querySelector(".todo-list");
-const showItem = Web_pilot.createElement(NewTodo);
-Web_pilot.render(showItem, appendHere);
 
 //===> End of 'Make to-do' that returns an empty input <====
 //Web_pilot.createElement(li,["key"]={dude} ["className"]="todo-list",[div,["className"]="view",nil, input,["className"]="toggle" ["type"]="checkbox", nil, label,["value"]={dude}])
