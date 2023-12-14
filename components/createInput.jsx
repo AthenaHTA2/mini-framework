@@ -1,7 +1,7 @@
-import {Web_pilot} from "../web_pilot/web_pilot.jsx"
+  import {Web_pilot} from "../web_pilot/web_pilot.jsx"
   
   /** @jsx Web_pilot.createElement */
-  export function CreateInput() {
+export function CreateInput() {
   
       const NewTodo= (event) => {
     
@@ -11,11 +11,10 @@ import {Web_pilot} from "../web_pilot/web_pilot.jsx"
           let task = event.target.value
           const [state, setState] = Web_pilot.useState(task);  
 
-          const theSection = document.querySelector(".main")
-          const theFooter = document.querySelector(".footer")
-
-          theSection.setAttribute("style", "display: block;");
-          theFooter.setAttribute("style", "display: block;");
+          section = document.getElementsByClassName("main")[0]
+          footer = document.getElementsByClassName("footer")[0]
+          section.style.display = "block"
+          footer.style.display ="block"
     
           function createNewTask() {
           
@@ -49,7 +48,9 @@ import {Web_pilot} from "../web_pilot/web_pilot.jsx"
     
     }
     
-    /*let appendHere = document.getElementsByClassName("header")[0];
-    const showItem = Web_pilot.createElement(CreateInput);
-    Web_pilot.render(showItem, appendHere);*/
+    // let appendHere = document.getElementsByClassName("header")[0];
+    // const showItem = Web_pilot.createElement(CreateInput);
+    // Web_pilot.render(showItem, appendHere);
+
+
     
