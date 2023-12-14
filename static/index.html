@@ -8,18 +8,21 @@
 		<link rel="stylesheet" href="base.css">
 		<link rel="stylesheet" href="index.css">
 	</head>
-	<body id="root">
+	<body class = "learn-bar">
+		<aside class="learn"><header> <h3>JavaScript</h3> <span class="source-links">   <h5>Vanilla JavaScript Example</h5> <a href="https://github.com/tastejs/todomvc/tree/gh-pages/examples/vanillajs">Source</a>   </span> </header> <hr> <blockquote class="quote speech-bubble"> <p>JavaScript® (often shortened to JS) is a lightweight, interpreted, object-oriented language with first-class functions, most known as the scripting language for Web pages, but used in many non-browser environments as well such as node.js or Apache CouchDB.</p> <footer> <a href="http://developer.mozilla.org/en-US/docs/JavaScript">JavaScript</a> </footer> </blockquote>  <footer> <hr> <em>If you have other helpful links to share, or find any of the links above no longer work, please <a href="https://github.com/tastejs/todomvc/issues">let us know</a>.</em> </footer></aside>
 		<section class="todoapp">
-			<header class="header">
+			
+			<header class="header" >
+				
 				<h1>todos</h1>
-				<!-- <input class="new-todo" placeholder="What needs to be done?" autofocus> -->
+				<!-- <input id="new-task-bar" class="new-todo" placeholder="What needs to be done?" autofocus> -->
 			</header>
-			<section class="main">
+			<section class="main" style = "display: none;">
 				<input id="toggle-all" class="toggle-all" type="checkbox">
 				<label for="toggle-all">Mark all as complete</label>
 				<ul class="todo-list"></ul>
 			</section>
-			<footer class="footer">
+			<footer class="footer"  style = "display: none;" >
 				<span class="todo-count"></span>
 				<ul class="filters">
 					<li>
@@ -43,7 +46,8 @@
 			<p><a href="http://github.com/petehunt/">petehunt</a></p>
 			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
 		</footer>
-		<!-- <script type="module" src="../web_pilot/web_pilot.js"></script> -->
-        <script src="../web_pilot/web_pilot.jsx"></script>
+		<div id="root"></div>
+        <script type="module" src="../components/app.jsx"></script>
+		<!-- <script src="../web_pilot/addTask.jsx"></script> -->
 	</body>
 </html>
