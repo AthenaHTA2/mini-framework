@@ -1,5 +1,5 @@
 function createElement(type, props, ...children) {
-  let element = {
+  return {
     type,
     props: {
       ...props,
@@ -10,257 +10,249 @@ function createElement(type, props, ...children) {
       ),
     },
   }
-  console.log("Element Created:", element)
-    return element
-  }
-
-  
-  function createTextElement(text) {
-    return {
-      type: "TEXT_ELEMENT",
-      props: {
-        nodeValue: text,
-        children: [],
-      },
-    }
-  }
+}
 
 
-  
-  function createDom(fiber) {
-    const dom =
-      fiber.type == "TEXT_ELEMENT"
-        ? document.createTextNode("")
-        : document.createElement(fiber.type)
-  
-    updateDom(dom, {}, fiber.props)
-  
-    return dom
+function createTextElement(text) {
+  return {
+    type: "TEXT_ELEMENT",
+    props: {
+      nodeValue: text,
+      children: [],
+    },
   }
-  
-  const isEvent = key => key.startsWith("on")
-  const isProperty = key =>
-    key !== "children" && !isEvent(key)
-  const isNew = (prev, next) => key =>
-    prev[key] !== next[key]
-  const isGone = (prev, next) => key => !(key in next)
-  function updateDom(dom, prevProps, nextProps) {
-    //Remove old or changed event listeners
-    Object.keys(prevProps)
-      .filter(isEvent)
-      .filter(
-        key =>
-          !(key in nextProps) ||
-          isNew(prevProps, nextProps)(key)
+}
+
+
+
+function createDom(fiber) {
+  const dom =
+    fiber.type == "TEXT_ELEMENT"
+      ? document.createTextNode("")
+      : document.createElement(fiber.type)
+
+  updateDom(dom, {}, fiber.props)
+
+  return dom
+}
+
+const isEvent = key => key.startsWith("on")
+const isProperty = key =>
+  key !== "children" && !isEvent(key)
+const isNew = (prev, next) => key =>
+  prev[key] !== next[key]
+const isGone = (prev, next) => key => !(key in next)
+function updateDom(dom, prevProps, nextProps) {
+  //Remove old or changed event listeners
+  Object.keys(prevProps)
+    .filter(isEvent)
+    .filter(
+      key =>
+        !(key in nextProps) ||
+        isNew(prevProps, nextProps)(key)
+    )
+    .forEach(name => {
+      const eventType = name
+        .toLowerCase()
+        .substring(2)
+      dom.removeEventListener(
+        eventType,
+        prevProps[name]
       )
-      .forEach(name => {
-        const eventType = name
-          .toLowerCase()
-          .substring(2)
-        dom.removeEventListener(
-          eventType,
-          prevProps[name]
-        )
-      })
-  
-    // Remove old properties
-    Object.keys(prevProps)
-      .filter(isProperty)
-      .filter(isGone(prevProps, nextProps))
-      .forEach(name => {
-        dom[name] = ""
-      })
-  
-    // Set new or changed properties
-    Object.keys(nextProps)
-      .filter(isProperty)
-      .filter(isNew(prevProps, nextProps))
-      .forEach(name => {
-        dom[name] = nextProps[name]
-      })
-  
-    // Add event listeners
-    Object.keys(nextProps)
-      .filter(isEvent)
-      .filter(isNew(prevProps, nextProps))
-      .forEach(name => {
-        const eventType = name
-          .toLowerCase()
-          .substring(2)
-        dom.addEventListener(
-          eventType,
-          nextProps[name]
-        )
-      })
-  }
-  
-  function commitRoot() {
-    pendingEffects.forEach(it => it()) // call pending effects after render
-    deletions.forEach(commitWork)
-    commitWork(wipRoot.child)
-    currentRoot = wipRoot
-    wipRoot = null
-  }
-  
-  function commitWork(fiber) {
-    if (!fiber) {
-      return
-    }
-  
-    let domParentFiber = fiber.parent
-    while (!domParentFiber.dom) {
-      domParentFiber = domParentFiber.parent
-    }
-    const domParent = domParentFiber.dom
-  
-    if (
-      fiber.effectTag === "PLACEMENT" &&
-      fiber.dom != null
-    ) {
-      domParent.appendChild(fiber.dom)
-    } else if (
-      fiber.effectTag === "UPDATE" &&
-      fiber.dom != null
-    ) {
-      updateDom(
-        fiber.dom,
-        fiber.alternate.props,
-        fiber.props
+    })
+
+  // Remove old properties
+  Object.keys(prevProps)
+    .filter(isProperty)
+    .filter(isGone(prevProps, nextProps))
+    .forEach(name => {
+      dom[name] = ""
+    })
+
+  // Set new or changed properties
+  Object.keys(nextProps)
+    .filter(isProperty)
+    .filter(isNew(prevProps, nextProps))
+    .forEach(name => {
+      dom[name] = nextProps[name]
+    })
+
+  // Add event listeners
+  Object.keys(nextProps)
+    .filter(isEvent)
+    .filter(isNew(prevProps, nextProps))
+    .forEach(name => {
+      const eventType = name
+        .toLowerCase()
+        .substring(2)
+      dom.addEventListener(
+        eventType,
+        nextProps[name]
       )
-    } else if (fiber.effectTag === "DELETION") {
-      commitDeletion(fiber, domParent)
-    }
-  
-    commitWork(fiber.child)
-    commitWork(fiber.sibling)
+    })
+}
+
+function commitRoot() {
+  pendingEffects.forEach(it => it()) // call pending effects after render
+  deletions.forEach(commitWork)
+  commitWork(wipRoot.child)
+  currentRoot = wipRoot
+  wipRoot = null
+}
+
+function commitWork(fiber) {
+  if (!fiber) {
+    return
   }
-  
-  function commitDeletion(fiber, domParent) {
-    if (fiber.dom) {
-      domParent.removeChild(fiber.dom)
-    } else {
-      commitDeletion(fiber.child, domParent)
-    }
+
+  let domParentFiber = fiber.parent
+  while (!domParentFiber.dom) {
+    domParentFiber = domParentFiber.parent
   }
-  
-  function render(element, container) {
+  const domParent = domParentFiber.dom
+
+  if (
+    fiber.effectTag === "PLACEMENT" &&
+    fiber.dom != null
+  ) {
+    domParent.appendChild(fiber.dom)
+  } else if (
+    fiber.effectTag === "UPDATE" &&
+    fiber.dom != null
+  ) {
+    updateDom(
+      fiber.dom,
+      fiber.alternate.props,
+      fiber.props
+    )
+  } else if (fiber.effectTag === "DELETION") {
+    commitDeletion(fiber, domParent)
+  }
+
+  commitWork(fiber.child)
+  commitWork(fiber.sibling)
+}
+
+function commitDeletion(fiber, domParent) {
+  if (fiber.dom) {
+    domParent.removeChild(fiber.dom)
+  } else {
+    commitDeletion(fiber.child, domParent)
+  }
+}
+
+function render(element, container) {
+  wipRoot = {
+    dom: container,
+    props: {
+      children: [element],
+    },
+    alternate: currentRoot,
+  }
+  deletions = []
+  nextUnitOfWork = wipRoot
+}
+
+let nextUnitOfWork = null
+let currentRoot = null
+let wipRoot = null
+let deletions = null
+
+function workLoop(deadline) {
+  let shouldYield = false
+  while (nextUnitOfWork && !shouldYield) {
+    nextUnitOfWork = performUnitOfWork(
+      nextUnitOfWork
+    )
+    shouldYield = deadline.timeRemaining() < 1
+  }
+
+  if (!nextUnitOfWork && wipRoot) {
+    commitRoot()
+  }
+
+  requestIdleCallback(workLoop)
+}
+
+requestIdleCallback(workLoop)
+
+function performUnitOfWork(fiber) {
+  const isFunctionComponent =
+    fiber.type instanceof Function
+  if (isFunctionComponent) {
+    updateFunctionComponent(fiber)
+    
+  } else {
+    updateHostComponent(fiber)
+  }
+  if (fiber.child) {
+    return fiber.child
+  }
+  let nextFiber = fiber
+  while (nextFiber) {
+    if (nextFiber.sibling) {
+      return nextFiber.sibling
+    }
+    nextFiber = nextFiber.parent
+  }
+}
+
+let wipFiber = null
+let hookIndex = null
+
+function updateFunctionComponent(fiber) {
+  wipFiber = fiber
+  hookIndex = 0
+  wipFiber.hooks = []
+  const children = [fiber.type(fiber.props)]
+  reconcileChildren(fiber, children)
+}
+
+function useState(initial) {
+  const oldHook =
+    wipFiber.alternate &&
+    wipFiber.alternate.hooks &&
+    wipFiber.alternate.hooks[hookIndex]
+  const hook = {
+    state: oldHook ? oldHook.state : initial,
+    queue: [],
+  }
+
+  const actions = oldHook ? oldHook.queue : []
+  actions.forEach(action => {
+    hook.state = action(hook.state)
+  })
+
+  const setState = action => {
+    hook.queue.push(action)
     wipRoot = {
-      dom: container,
-      props: {
-        children: [element],
-      },
+      dom: currentRoot.dom,
+      props: currentRoot.props,
       alternate: currentRoot,
     }
-    deletions = []
     nextUnitOfWork = wipRoot
+    deletions = []
   }
-  
-  let nextUnitOfWork = null
-  let currentRoot = null
-  let wipRoot = null
-  let deletions = null
-  
-  function workLoop(deadline) {
-    let shouldYield = false
-    while (nextUnitOfWork && !shouldYield) {
-      nextUnitOfWork = performUnitOfWork(
-        nextUnitOfWork
-      )
-      shouldYield = deadline.timeRemaining() < 1
-    }
-  
-    if (!nextUnitOfWork && wipRoot) {
-      commitRoot()
-    }
-  
-    requestIdleCallback(workLoop)
-  }
-  
-  requestIdleCallback(workLoop)
-  
-  function performUnitOfWork(fiber) {
-    const isFunctionComponent =
-      fiber.type instanceof Function
-    if (isFunctionComponent) {
-      updateFunctionComponent(fiber)
-      // Object .keys(wipFiber._hooks)
-      //               .filter(hookIndex => wipFiber._hooks[hookIndex].tag === "EFFECT")
-      //               .forEach(hookIndex => {
-      //                   const oldHook =
-      //                       wipFiber.alternate &&
-      //                       wipFiber.alternate._hooks &&
-      //                       wipFiber.alternate._hooks[hookIndex]
 
-      //                   const hook = wipFiber._hooks[hookIndex]
-      //                   const depsChanged = (prev, next) => (_, index) => prev[index] !== next[index];
-      //                   if (hook.deps.length === 0 && !oldHook
-      //                       || oldHook && (oldHook.deps.length !== hook.deps.length
-      //                           || oldHook && hook.deps.filter(depsChanged(oldHook.deps, hook.deps)).length !== 0)) {
-      //                       pendingEffects.push(hook.fn)
-      //                   }
-      //               })
-      
-    } else {
-      updateHostComponent(fiber)
-    }
-    //?? child
-    if (fiber.child) {
-      return fiber.child
-    }
-    let nextFiber = fiber
-    while (nextFiber) {
-        //?? sibling
-      if (nextFiber.sibling) {
-        return nextFiber.sibling
-      }
-      //?? parent
-      nextFiber = nextFiber.parent
-    }
+  wipFiber.hooks.push(hook)
+  hookIndex++
+  return [hook.state, setState]
+}
+// ------------------------------------------------------------------------- //
+let pendingEffects = []
+function useEffect(fn, deps) {
+  const hook = {
+      tag: "EFFECT",
+      fn,
+      deps,
   }
-  
-  let wipFiber = null
-  let hookIndex = null
-  
-  function updateFunctionComponent(fiber) {
-    wipFiber = fiber
-    hookIndex = 0
-    wipFiber.hooks = []
-    const children = [fiber.type(fiber.props)]
-    reconcileChildren(fiber, children)
-  }
-  
-  function useState(initial) {
-    const oldHook =
-      wipFiber.alternate &&
-      wipFiber.alternate.hooks &&
-      wipFiber.alternate.hooks[hookIndex]
-    const hook = {
-      state: oldHook ? oldHook.state : initial,
-      queue: [],
-    }
-  
-    const actions = oldHook ? oldHook.queue : []
-    actions.forEach(action => {
-      hook.state = action(hook.state)
-    })
-  
-    const setState = action => {
-      hook.queue.push(action)
-      wipRoot = {
-        dom: currentRoot.dom,
-        props: currentRoot.props,
-        alternate: currentRoot,
-      }
-      nextUnitOfWork = wipRoot
-      deletions = []
-    }
-  
-    wipFiber.hooks.push(hook)
-    hookIndex++
-    return [hook.state, setState]
-  }
-  
- 
+
+  wipFiber._hooks.push(hook)
+  hookIndex++
+}
+
+
+// ------------------------------------------------------------------------- //
 
 
 function updateHostComponent(fiber) {
@@ -529,63 +521,6 @@ Web_pilot.render(attachListener, theInput)
   let appendHere = document.getElementsByClassName("header")[0];
   const showItem = Web_pilot.createElement(CreateInput);
   Web_pilot.render(showItem, appendHere);*/
-
-
-
-
-
-
-
-/** @jsx Web_pilot.createElement */
-/*function NewTodo(Event) {
-  const [dude, setDude] = Web_pilot.useState("");
-  const appendHere = document.querySelector(".todo-list");
-  const theInput = document.querySelector(".new-todo");
-  
-  function NewItem() {
-   
-    if (Event.key === 'Enter') {
-      setDude(() => Event.target.value);
-
-     // appendHere.onKeyDown(() => handleKeyDown())
-      //className="new-todo"
-      //placeholder="The second input"
-
-      const newItem = (
-        <li key={dude} >
-        <div className="view">
-        <input type="checkbox" className="toggle"/>
-        <label value={dude}></label>
-        <button className="destroy"></button>
-        </div>
-        <input className="edit" value={dude}></input>
-      </li>
-      )
-
-         Web_pilot.render(newItem, appendHere)
-  }
-  }
-
-  theInput.addEventListener('onkeydown', NewItem)
-  console.log("the key value is:", Event.target.value)
-
-  return (
-    <li key={dude} >
-    <div className="view">
-    <input type="checkbox" className="toggle"/>
-    <label value={dude}></label>
-    <button className="destroy"></button>
-    </div>
-    <input className="edit" value={dude}></input>
-  </li>
-   )
-
-   //return(
-// Web_pilot.createElement(NewItem)
-   //)
-
-}*/
-
 
 
 
