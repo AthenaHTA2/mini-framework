@@ -335,7 +335,7 @@ export const Web_pilot = {
 
 /** @jsx Web_pilot.createElement */
 /*function Counter() {
-  const [state, setState] = Web_pilot.useStatstate(1)
+  const [state, setState] = Web_pilot.useState(1)
   return (
     <h1 onClick={() => setState(c => c + 1)}>
       Count: {state}
