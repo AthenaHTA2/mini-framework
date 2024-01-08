@@ -1,10 +1,11 @@
 import {Web_pilot} from "../web_pilot/web_pilot.jsx"
-import { task, dataId, listInfo } from "./createInput"
+import { listInfo } from "./createInput"
+import {App} from "./app.jsx"
 
 
 /** @jsx Web_pilot.createElement */
 
-export function createNewTask() {
+export function List() {
     function EditTaskItem(e) {
         //on double click: editing class
         // let item = document.getElementById(`${e.target.tag}`)
@@ -18,8 +19,8 @@ export function createNewTask() {
     })
         // listInfo = listInfoC
         console.log("edit listInfo", listInfo, e.target.value)
-        const appendHere = document.getElementsByClassName("main")[0];
-          let newTask = Web_pilot.createElement(createNewTask)
+        const appendHere = document.getElementsByClassName("learn-bar")[0];
+          let newTask = Web_pilot.createElement(App)
           Web_pilot.render(newTask, appendHere)
       }
     
@@ -44,8 +45,8 @@ export function createNewTask() {
           document.getElementsByClassName('clear-completed')[0].style.display = "none"
         }
         console.log("toggle list item",e.target.value, listInfo)
-        const appendHere = document.getElementsByClassName("main")[0];
-          let newTask = Web_pilot.createElement(createNewTask)
+        const appendHere = document.getElementsByClassName("learn-bar")[0];
+          let newTask = Web_pilot.createElement(App)
           Web_pilot.render(newTask, appendHere)
      }
     
@@ -67,8 +68,8 @@ export function createNewTask() {
             } 
           })
           console.log("stop2 listInfo", listInfo)
-          const appendHere = document.getElementsByClassName("main")[0];
-          let newTask = Web_pilot.createElement(createNewTask)
+          const appendHere = document.getElementsByClassName("learn-bar")[0];
+          let newTask = Web_pilot.createElement(App)
           Web_pilot.render(newTask, appendHere)
         }
       }
