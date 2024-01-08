@@ -1,15 +1,22 @@
 
-
+// const = isArray = child => child.constructor !== Array
 function createElement(type, props, ...children) {
+  console.log("element children", children)
+  // let childList = children.flat()
+  
+ 
   let element = {
     type,
     props: {
       ...props,
-      children: children.map(child =>
-        typeof child === "object"
-          ? child
-          : createTextElement(child)
-      ),
+      children: children.map(child => {
+        if (typeof child === "object") {
+          console.log("child", child)
+          return child
+        } else if(typeof child === "string" ) {
+          return createTextElement(child)
+        }
+      }),
     },
   }
   console.log("Element Created:", element)
@@ -18,6 +25,7 @@ function createElement(type, props, ...children) {
 
   
   function createTextElement(text) {
+    console.log("text elment", text)
     return {
       type: "TEXT_ELEMENT",
       props: {
@@ -30,11 +38,12 @@ function createElement(type, props, ...children) {
 
   
   function createDom(fiber) {
+    console.log("we are creating the dom")
     const dom =
       fiber.type == "TEXT_ELEMENT"
         ? document.createTextNode("")
         : document.createElement(fiber.type)
-  
+    console.log("creating dom", dom, fiber.type)
     updateDom(dom, {}, fiber.props)
   
     return dom
@@ -47,6 +56,7 @@ function createElement(type, props, ...children) {
     prev[key] !== next[key]
   const isGone = (prev, next) => key => !(key in next)
   function updateDom(dom, prevProps, nextProps) {
+    console.log("current dom, ", dom)
     //Remove old or changed event listeners
     Object.keys(prevProps)
       .filter(isEvent)
@@ -78,6 +88,7 @@ function createElement(type, props, ...children) {
       .filter(isProperty)
       .filter(isNew(prevProps, nextProps))
       .forEach(name => {
+        // console.log("property: ",name, nextProps[name])
         dom[name] = nextProps[name]
       })
   
@@ -119,6 +130,7 @@ function createElement(type, props, ...children) {
       fiber.effectTag === "PLACEMENT" &&
       fiber.dom != null
     ) {
+      console.log("item commited", fiber.dom)
       domParent.appendChild(fiber.dom)
     } else if (
       fiber.effectTag === "UPDATE" &&
@@ -153,6 +165,7 @@ function createElement(type, props, ...children) {
       },
       alternate: currentRoot,
     }
+    console.log("wipRoot, ", wipRoot)
     deletions = []
     nextUnitOfWork = wipRoot
   }
@@ -184,6 +197,7 @@ function createElement(type, props, ...children) {
     const isFunctionComponent =
       fiber.type instanceof Function
     if (isFunctionComponent) {
+      console.log("found function component")
       updateFunctionComponent(fiber)
       // Object .keys(wipFiber._hooks)
       //               .filter(hookIndex => wipFiber._hooks[hookIndex].tag === "EFFECT")
@@ -203,18 +217,23 @@ function createElement(type, props, ...children) {
       //               })
       
     } else {
+      console.log("found host component")
       updateHostComponent(fiber)
     }
     //?? child
     if (fiber.child) {
+      console.log("next unit of work fiber.child")
       return fiber.child
     }
     let nextFiber = fiber
     while (nextFiber) {
         //?? sibling
+        
       if (nextFiber.sibling) {
+        console.log("next unit of work fiber.sibling")
         return nextFiber.sibling
       }
+      console.log("next unit of work fiber.parent")
       //?? parent
       nextFiber = nextFiber.parent
     }
@@ -227,8 +246,10 @@ function createElement(type, props, ...children) {
     wipFiber = fiber
     hookIndex = 0
     wipFiber.hooks = []
+    console.log("creating function children")
     const children = [fiber.type(fiber.props)]
-    reconcileChildren(fiber, children)
+    console.log("function component childen:", children, fiber.type, "props", fiber.props)
+    reconcileChildren(fiber, children.flat())
   }
   
   function useState(initial) {
@@ -279,10 +300,12 @@ function createElement(type, props, ...children) {
 
   
   function updateHostComponent(fiber) {
+    console.log("updating host")
     if (!fiber.dom) {
+      console.log("udating host: no dom: fiber = ", fiber)
       fiber.dom = createDom(fiber)
     }
-    reconcileChildren(fiber, fiber.props.children)
+    reconcileChildren(fiber, fiber.props.children.flat())
   }
   
   function reconcileChildren(wipFiber, elements) {
@@ -298,13 +321,15 @@ function createElement(type, props, ...children) {
     ) {
       const element = elements[index]
       let newFiber = null
-  
+      //changed: oldFiber && element && element.type == oldFiber.type 
+      //&& element.props == oldFiber.props
       const sameType =
         oldFiber &&
         element &&
         element.type == oldFiber.type
   
       if (sameType) {
+
         newFiber = {
           type: oldFiber.type,
           props: element.props,
@@ -315,6 +340,7 @@ function createElement(type, props, ...children) {
         }
       }
       if (element && !sameType) {
+        console.log("reconcile children element:", element, "\n parent: ", wipFiber)
         newFiber = {
           type: element.type,
           props: element.props,
