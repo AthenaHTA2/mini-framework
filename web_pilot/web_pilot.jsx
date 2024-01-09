@@ -49,7 +49,7 @@ function updateDom(dom, prevProps, nextProps) {
     .filter(
       key =>
         !(key in nextProps) ||
-        isNew(prevProps, nextProps)(key)
+        isNew(prevProps, nextProps)(key) 
     )
     .forEach(name => {
       const eventType = name
@@ -270,7 +270,7 @@ function reconcileChildren(wipFiber, elements) {
 
   while (
     index < elements.length ||
-    oldFiber != null
+    oldFiber
   ) {
     const element = elements[index]
     let newFiber = null
