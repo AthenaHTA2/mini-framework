@@ -12,9 +12,6 @@ export function Footer() {
     function CompletedItems() {
 
     }
-    function ClearCompletedItems() {
-
-    }
     console.log("increment", increment)
     return (
         <footer className="footer"  style = "display: none;" >
@@ -33,7 +30,7 @@ export function Footer() {
                 <a href="#/completed" onClick={() => (CompletedItems(e))}>Completed</a>
             </li>
         </ul>
-        <button style = "display: none;" onClick={() => (ClearCompletedItems(e))} className="clear-completed">Clear completed</button>
+        <button style = "display: none;" className="clear-completed">Clear completed</button>
     </footer>
     )
 }
